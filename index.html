@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astronomical Heatmap Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-4xl text-center">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Astronomical Heatmap Explorer</h1>
+        <p class="text-gray-600 mb-6">Select features for the X and Y axes to visualize the heatmap.</p>
+        
+        <div class="flex justify-center items-end space-x-4 mb-6">
+            <div>
+                <label for="xAxisSelect" class="block text-sm font-medium text-gray-700 mb-1 text-left">X-Axis Feature</label>
+                <select id="xAxisSelect" class="bg-gray-200 text-gray-800 p-3 rounded-lg shadow-inner w-full max-w-xs mx-auto">
+                    <option value="">Select feature</option>
+                    <option value="sun_longitude">Sun Longitude</option>
+                    <option value="moon_longitude">Moon Longitude</option>
+                    <option value="distance_to_sun">Distance to Sun</option>
+                    <option value="angle_of_incidence">Angle of Incidence</option>
+                    <option value="planetary_alignment">Planetary Alignment</option>
+                </select>
+            </div>
+            <div>
+                <label for="yAxisSelect" class="block text-sm font-medium text-gray-700 mb-1 text-left">Y-Axis Feature</label>
+                <select id="yAxisSelect" class="bg-gray-200 text-gray-800 p-3 rounded-lg shadow-inner w-full max-w-xs mx-auto">
+                    <option value="">Select feature</option>
+                    <option value="sun_longitude">Sun Longitude</option>
+                    <option value="moon_longitude">Moon Longitude</option>
+                    <option value="distance_to_sun">Distance to Sun</option>
+                    <option value="angle_of_incidence">Angle of Incidence</option>
+                    <option value="planetary_alignment">Planetary Alignment</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mt-8 flex justify-center items-center space-x-4 sm:space-x-8">
+            
+            <div class="flex flex-col items-center w-full max-w-xl">
+                <h2 id="heatmapTitle" class="text-2xl font-bold text-gray-700 mb-4 h-8"></h2>
+                
+                <div class="flex w-full">
+                    <div class="flex flex-col items-center justify-between w-16 py-2">
+                        <span class="text-sm text-gray-500">High</span>
+                        <p id="y-axis-label" class="-rotate-90 whitespace-nowrap text-lg font-semibold text-gray-700">Y-Axis</p>
+                        <span class="text-sm text-gray-500">Low</span>
+                    </div>
+                    
+                    <div id="heatmap-container" class="w-full aspect-square">
+                        <canvas id="heatmapCanvas" class="h-full w-full"></canvas>
+                    </div>
+                </div>
+
+                <div class="w-full pl-16">
+                    <p id="x-axis-label" class="text-lg font-semibold text-gray-700 pt-2">X-Axis</p>
+                    <div class="flex justify-between">
+                        <span class="text-sm text-gray-500">Low</span>
+                        <span class="text-sm text-gray-500">High</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <canvas id="legendCanvas" width="20" height="300"></canvas>
+                <div class="flex flex-col h-[300px] justify-between text-sm text-gray-600">
+                    <span>High</span>
+                    <span>Low</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 pt-8 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="text-left">
+                    <h2 class="text-2xl font-bold text-gray-700 mb-4">Model Performance</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-200 p-4 rounded-lg">
+                            <p class="text-sm font-medium text-gray-600">R-squared</p>
+                            <p class="text-2xl font-bold text-gray-800">0.317899</p>
+                        </div>
+                        <div class="bg-gray-200 p-4 rounded-lg">
+                            <p class="text-sm font-medium text-gray-600">RMSE</p>
+                            <p class="text-2xl font-bold text-gray-800">12.34</p>
+                        </div>
+                        <div class="bg-gray-200 p-4 rounded-lg">
+                            <p class="text-sm font-medium text-gray-600">MC p-value</p>
+                            <p class="text-2xl font-bold text-gray-800">&lt; 0.001</p>
+                        </div>
+                        <div class="bg-gray-200 p-4 rounded-lg">
+                            <p class="text-sm font-medium text-gray-600">Cross MSE</p>
+                            <p class="text-2xl font-bold text-gray-800">57.916882</p>
+                        </div>
+                        <div class="bg-gray-200 p-4 rounded-lg">
+                            <p class="text-sm font-medium text-gray-600">Test MSE</p>
+                            <p class="text-2xl font-bold text-gray-800">40.410485</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-left">
+                    <h2 class="text-2xl font-bold text-gray-700 mb-4">Feature Importances</h2>
+                    <ul class="space-y-2">
+                        <li class="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+                            <span class="font-medium text-gray-700">Ascendant Degree</span>
+                            <span class="text-lg font-semibold text-gray-800">0.389</span>
+                        </li>
+                        <li class="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+                            <span class="font-medium text-gray-700">Sun Longitude</span>
+                            <span class="text-lg font-semibold text-gray-800">0.1441</span>
+                        </li>
+                        <li class="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+                            <span class="font-medium text-gray-700">Venus Longitude</span>
+                            <span class="text-lg font-semibold text-gray-800">0.0616</span>
+                        </li>
+                        <li class="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+                            <span class="font-medium text-gray-700">Mercury Longitude</span>
+                            <span class="text-lg font-semibold text-gray-800">0.0565</span>
+                        </li>
+                        <li class="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+                            <span class="font-medium text-gray-700">Pluto Longitude</span>
+                            <span class="text-lg font-semibold text-gray-800">0.0447</span>
+                        </li>
+                         <li class="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+                            <span class="font-medium text-gray-700">Uranus Longitude</span>
+                            <span class="text-lg font-semibold text-gray-800">0.0415</span>
+                        </li>
+                         <li class="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+                            <span class="font-medium text-gray-700">Moon Phase</span>
+                            <span class="text-lg font-semibold text-gray-800">0.0391</span>
+                        </li>
+                         <li class="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+                            <span class="font-medium text-gray-700">Mars Longitude</span>
+                            <span class="text-lg font-semibold text-gray-800">0.0370</span>
+                        </li>
+                         <li class="flex justify-between items-center bg-gray-200 p-3 rounded-lg">
+                            <span class="font-medium text-gray-700">Jupiter Longitude</span>
+                            <span class="text-lg font-semibold text-gray-800">0.0307</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js" defer></script>
+</body>
+</html>

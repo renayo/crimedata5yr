@@ -1,0 +1,13 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+canvas {
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Ensures the canvas drawing is sharp on high-DPI screens */
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
